@@ -2,17 +2,17 @@ import { useEffect } from "react";
 import { Movie } from "../../types/movie";
 import styles from "./MovieModal.module.css";
 
-interface Props {
+interface MovieModalProps {
   movie: Movie;
   onClose: () => void;
 }
 
-const MovieModal = ({ movie, onClose }: Props) => {
+const MovieModal = ({ movie, onClose }: MovieModalProps) => {
   useEffect(() => {
-    // Забороняємо скролл при відкритій модалці
+    // Забороняємо скрол сторінки
     document.body.style.overflow = "hidden";
 
-    // Закриття по клавіші Escape
+    // Додаємо слухача для Escape
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -20,14 +20,13 @@ const MovieModal = ({ movie, onClose }: Props) => {
     };
     window.addEventListener("keydown", handleEsc);
 
-    // Закриваємо все при демоунті
+    // При закритті модалки: видаляємо слухача і відновлюємо скрол
     return () => {
       document.body.style.overflow = "auto";
       window.removeEventListener("keydown", handleEsc);
     };
   }, [onClose]);
 
-  // Закриття по кліку на backdrop
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
